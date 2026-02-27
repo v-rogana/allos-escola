@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allos Escola — Laboratório de Comunidade</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #FDFAF5;
+            --color-bg-warm: #F7F0E6;
+            --color-text: #2C2416;
+            --color-text-soft: #6B5D4F;
+            --color-accent: #1A6B5A;
+            --color-accent-light: #2A9D8F;
+            --color-accent-glow: #E8F5F0;
+            --color-amber: #D4883E;
+            --color-amber-light: #F5E6D0;
+            --color-rose: #C4616A;
+            --color-card: #FFFFFF;
+            --color-border: #E8DFD3;
+            --radius: 20px;
+            --radius-sm: 12px;
+            --shadow-soft: 0 4px 24px rgba(44, 36, 22, 0.06);
+            --shadow-hover: 0 12px 40px rgba(44, 36, 22, 0.12);
+            --font-display: 'Fraunces', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--color-bg);
+            color: var(--color-text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* === GRAIN TEXTURE OVERLAY === */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* === NAVIGATION === */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(253, 250, 245, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(232, 223, 211, 0.5);
+            transition: all 0.4s ease;
+        }
+
+        nav.scrolled {
+            padding: 0.6rem 2rem;
+            box-shadow: 0 2px 20px rgba(44, 36, 22, 0.06);
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-logo span {
+            color: var(--color-amber);
+            font-style: italic;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-text-soft);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--color-accent); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* === HERO === */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .hero-bg .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .hero-bg .blob-1 {
+            width: 500px; height: 500px;
+            background: var(--color-accent-glow);
+            top: -10%; left: -5%;
+        }
+
+        .hero-bg .blob-2 {
+            width: 400px; height: 400px;
+            background: var(--color-amber-light);
+            bottom: -5%; right: -5%;
+            animation-delay: -7s;
+        }
+
+        .hero-bg .blob-3 {
+            width: 300px; height: 300px;
+            background: #F0E8F5;
+            top: 30%; right: 15%;
+            animation-delay: -14s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.05); }
+            66% { transform: translate(-20px, 15px) scale(0.95); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.2rem;
+            background: var(--color-accent-glow);
+            color: var(--color-accent);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.2s;
+        }
+
+        .hero-badge .dot {
+            width: 8px; height: 8px;
+            background: var(--color-accent-light);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            max-width: 800px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.4s;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--color-accent);
+            font-weight: 400;
+        }
+
+        .hero-sub {
+            font-size: 1.15rem;
+            color: var(--color-text-soft);
+            max-width: 520px;
+            margin-top: 1.5rem;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.6s;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.8s;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            border-radius: 100px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--color-accent);
+            color: white;
+            box-shadow: 0 4px 16px rgba(26, 107, 90, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: #155A4C;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(26, 107, 90, 0.35);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--color-text);
+            border: 1.5px solid var(--color-border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            transform: translateY(-2px);
+        }
+
+        /* === SCROLL INDICATOR === */
+        .scroll-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 1.2s;
+        }
+
+        .scroll-hint span {
+            font-size: 0.75rem;
+            color: var(--color-text-soft);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--color-accent), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        /* === SECTIONS === */
+        section {
+            padding: 6rem 2rem;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        .section-header h2 em {
+            font-style: italic;
+            color: var(--color-accent);
+        }
+
+        .section-header p {
+            color: var(--color-text-soft);
+            max-width: 500px;
+            margin: 1rem auto 0;
+            font-size: 1.05rem;
+        }
+
+        /* === PLATFORM CARDS (iframes) === */
+        #plataformas {
+            background: var(--color-bg-warm);
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .platform-card {
+            background: var(--color-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-preview {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, var(--color-accent-glow), var(--color-amber-light));
+        }
+
+        .card-preview iframe {
+            width: 200%;
+            height: 200%;
+            border: none;
+            transform: scale(0.5);
+            transform-origin: top left;
+            pointer-events: none;
+        }
+
+        .card-preview-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(255,255,255,0.9));
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .platform-card:hover .card-preview-overlay {
+            opacity: 1;
+        }
+
+        .preview-btn {
+            padding: 0.5rem 1.5rem;
+            background: var(--color-accent);
+            color: white;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: none;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transform: translateY(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .platform-card:hover .preview-btn {
+            transform: translateY(0);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon.green { background: var(--color-accent-glow); }
+        .card-icon.amber { background: var(--color-amber-light); }
+        .card-icon.rose { background: #FDE8EA; }
+        .card-icon.blue { background: #E8EFF8; }
+
+        .card-body h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+        }
+
+        .card-body p {
+            color: var(--color-text-soft);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .card-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--color-bg);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-soft);
+            margin-top: 0.75rem;
+        }
+
+        /* === VALUES / PILLARS === */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .pillar {
+            padding: 2.5rem 2rem;
+            border-radius: var(--radius);
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pillar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 3px 3px 0 0;
+            transition: height 0.3s ease;
+        }
+
+        .pillar:nth-child(1)::before { background: var(--color-accent); }
+        .pillar:nth-child(2)::before { background: var(--color-amber); }
+        .pillar:nth-child(3)::before { background: var(--color-rose); }
+
+        .pillar:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .pillar:hover::before { height: 5px; }
+
+        .pillar-num {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--color-border);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .pillar h3 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .pillar p {
+            color: var(--color-text-soft);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* === STATS BANNER === */
+        .stats-banner {
+            background: var(--color-accent);
+            padding: 4rem 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 50%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        }
+
+        .stats-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .stat h3 {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        /* === IFRAME MODAL === */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(44, 36, 22, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-container {
+            width: 100%;
+            max-width: 1100px;
+            height: 85vh;
+            background: var(--color-card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 40px 80px rgba(44, 36, 22, 0.3);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            background: var(--color-bg);
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .modal-btn {
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-family: var(--font-body);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--color-border);
+            background: white;
+            color: var(--color-text);
+            text-decoration: none;
+        }
+
+        .modal-btn:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-soft);
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--color-bg-warm);
+            color: var(--color-text);
+        }
+
+        .modal-body {
+            flex: 1;
+            position: relative;
+        }
+
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .modal-loader {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-bg);
+            transition: opacity 0.3s;
+        }
+
+        .modal-loader.hidden { opacity: 0; pointer-events: none; }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--color-border);
+            border-top-color: var(--color-accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* === UPCOMING / EVENTS === */
+        .events-list {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--color-card);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-border);
+            transition: all 0.3s ease;
+        }
+
+        .event-item:hover {
+            border-color: var(--color-accent);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .event-date {
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .event-date .month {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-accent);
+        }
+
+        .event-date .day {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--color-text);
+        }
+
+        .event-info h4 {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .event-info p {
+            color: var(--color-text-soft);
+            font-size: 0.85rem;
+        }
+
+        .event-tag {
+            margin-left: auto;
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+
+        .event-tag.live { background: #FDE8EA; color: var(--color-rose); }
+        .event-tag.soon { background: var(--color-amber-light); color: var(--color-amber); }
+        .event-tag.open { background: var(--color-accent-glow); color: var(--color-accent); }
+
+        /* === FOOTER === */
+        footer {
+            background: var(--color-text);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand .nav-logo {
+            color: white;
+            font-size: 1.6rem;
+        }
+
+        .footer-brand .nav-logo span {
+            color: var(--color-amber);
+        }
+
+        .footer-brand p {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            max-width: 300px;
+        }
+
+        .footer-col h4 {
+            color: white;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.3rem 0;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover { color: white; }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        /* === RESPONSIVE === */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .pillars-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .platform-grid { grid-template-columns: 1fr; }
+            .modal-container { height: 90vh; border-radius: var(--radius-sm); }
+            .event-item { flex-wrap: wrap; }
+            .event-tag { margin-left: 0; margin-top: 0.5rem; }
+
+            section { padding: 4rem 1.25rem; }
+
+            .hero { padding: 7rem 1.25rem 4rem; }
+        }
+
+        /* === SCROLL ANIMATIONS === */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* === COMING SOON PLACEHOLDER === */
+        .coming-soon {
+            height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--color-text-soft);
+            font-size: 0.9rem;
+        }
+
+        .coming-soon .icon {
+            font-size: 2rem;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav id="navbar">
+    <a href="#" class="nav-logo">allos <span>escola</span></a>
+    <ul class="nav-links">
+        <li><a href="#plataformas">Plataformas</a></li>
+        <li><a href="#pilares">Pilares</a></li>
+        <li><a href="#eventos">Eventos</a></li>
+        <li><a href="#plataformas" class="btn btn-primary" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">Explorar ↗</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="hero-badge">
+        <div class="dot"></div>
+        Laboratório de Comunidade
+    </div>
+
+    <h1>Transformando<br>talentos em <em>legado</em></h1>
+
+    <p class="hero-sub">
+        O espaço digital da Allos para aprendizado, eventos e ferramentas 
+        da nossa comunidade de ensino em psicologia.
+    </p>
+
+    <div class="hero-actions">
+        <a href="#plataformas" class="btn btn-primary">
+            Ver Plataformas
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#eventos" class="btn btn-outline">Próximos Eventos</a>
+    </div>
+
+    <div class="scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- PLATFORMS -->
+<section id="plataformas">
+    <div class="section-container">
+        <div class="section-header reveal">
+            <span class="section-tag">Plataformas</span>
+            <h2>Nossas ferramentas <em>ao vivo</em></h2>
+            <p>Acesse os ambientes interativos da Allos diretamente pelo portal.</p>
+        </div>
+
+        <div class="platform-grid">
+
+            <!-- Arena das Casas -->
+            <div class="platform-card reveal reveal-delay-1" onclick="openModal('Arena das Casas', 'https://v-rogana.github.io/competicao_casas_allos/')">
+                <div class="card-preview">
+                    <iframe src="https://v-rogana.github.io/competicao_casas_allos/" loading="lazy" sandbox="allow-scripts allow-same-origin" title="Arena das Casas preview"></iframe>
+                    <div class="card-preview-overlay">
+                        <button class="preview-btn">Abrir Plataforma</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-icon green">🏛️</div>
+                    <h3>Arena das Casas</h3>
+                    <p>Competição clínica entre as Casas da Allos. Acompanhe pontuações, rankings e o desempenho de cada equipe em tempo real.</p>
+                    <span class="card-tag">⚡ Ao vivo</span>
+                </div>
+            </div>
+
+            <!-- Calendário -->
+            <div class="platform-card reveal reveal-delay-2" onclick="openModal('Calendário Allos', 'https://v-rogana.github.io/calendario-allos-escola/')">
+                <div class="card-preview">
+                    <iframe src="https://v-rogana.github.io/calendario-allos-escola/" loading="lazy" sandbox="allow-scripts allow-same-origin" title="Calendário preview"></iframe>
+                    <div class="card-preview-overlay">
+                        <button class="preview-btn">Abrir Plataforma</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-icon amber">📅</div>
+                    <h3>Calendário Escola</h3>
+                    <p>Agenda completa da Allos Escola com workshops, supervisões, eventos e datas importantes para toda a comunidade.</p>
+                    <span class="card-tag">📆 Atualizado</span>
+                </div>
+            </div>
+
+            <!-- Placeholder: Em breve -->
+            <div class="platform-card reveal reveal-delay-3" style="cursor: default;">
+                <div class="card-preview">
+                    <div class="coming-soon">
+                        <span class="icon">🧪</span>
+                        Em breve
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-icon blue">🧠</div>
+                    <h3>Próxima Ferramenta</h3>
+                    <p>Novas plataformas e ferramentas interativas estão sendo desenvolvidas para enriquecer a experiência de aprendizado.</p>
+                    <span class="card-tag">🔜 Em desenvolvimento</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-banner">
+    <div class="stats-grid">
+        <div class="stat reveal">
+            <h3>200+</h3>
+            <p>Pacientes atendidos</p>
+        </div>
+        <div class="stat reveal reveal-delay-1">
+            <h3>~50</h3>
+            <p>Terapeutas em formação</p>
+        </div>
+        <div class="stat reveal reveal-delay-2">
+            <h3>5+</h3>
+            <p>Casas competindo</p>
+        </div>
+        <div class="stat reveal reveal-delay-3">
+            <h3>∞</h3>
+            <p>Potencial de impacto</p>
+        </div>
+    </div>
+</div>
+
+<!-- PILLARS -->
+<section id="pilares">
+    <div class="section-container">
+        <div class="section-header reveal">
+            <span class="section-tag">Pilares</span>
+            <h2>O que nos <em>guia</em></h2>
+            <p>Os valores que sustentam a missão da Allos Escola.</p>
+        </div>
+
+        <div class="pillars-grid">
+            <div class="pillar reveal reveal-delay-1">
+                <div class="pillar-num">01</div>
+                <h3>Ensino Acessível</h3>
+                <p>Formação prática e supervisionada para psicólogos recém-formados, com terapia acessível para quem mais precisa.</p>
+            </div>
+            <div class="pillar reveal reveal-delay-2">
+                <div class="pillar-num">02</div>
+                <h3>Comunidade Viva</h3>
+                <p>Um ecossistema onde terapeutas aprendem juntos, competem com respeito e crescem como profissionais e pessoas.</p>
+            </div>
+            <div class="pillar reveal reveal-delay-3">
+                <div class="pillar-num">03</div>
+                <h3>Inovação Clínica</h3>
+                <p>Ferramentas digitais, dados e processos que transformam a gestão clínica e potencializam resultados terapêuticos.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- EVENTS -->
+<section id="eventos" style="background: var(--color-bg-warm);">
+    <div class="section-container">
+        <div class="section-header reveal">
+            <span class="section-tag">Agenda</span>
+            <h2>Próximos <em>eventos</em></h2>
+            <p>Fique por dentro do que está acontecendo na comunidade.</p>
+        </div>
+
+        <div class="events-list">
+            <div class="event-item reveal reveal-delay-1">
+                <div class="event-date">
+                    <div class="month">Mar</div>
+                    <div class="day">05</div>
+                </div>
+                <div class="event-info">
+                    <h4>Workshop de Caso Clínico</h4>
+                    <p>Supervisão coletiva com estudo de caso e discussão técnica</p>
+                </div>
+                <span class="event-tag open">Aberto</span>
+            </div>
+
+            <div class="event-item reveal reveal-delay-2">
+                <div class="event-date">
+                    <div class="month">Mar</div>
+                    <div class="day">12</div>
+                </div>
+                <div class="event-info">
+                    <h4>Encontro das Casas</h4>
+                    <p>Atualização de pontuação e dinâmica entre equipes</p>
+                </div>
+                <span class="event-tag soon">Em breve</span>
+            </div>
+
+            <div class="event-item reveal reveal-delay-3">
+                <div class="event-date">
+                    <div class="month">Mar</div>
+                    <div class="day">20</div>
+                </div>
+                <div class="event-info">
+                    <h4>Palestra: Ética na Clínica-Escola</h4>
+                    <p>Convidado especial sobre dilemas éticos na formação</p>
+                </div>
+                <span class="event-tag open">Aberto</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="#" class="nav-logo">allos <span>escola</span></a>
+            <p>Associação Allos — Clínica-escola e ONG dedicada à formação de psicólogos e à terapia acessível.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Plataformas</h4>
+            <a href="#" onclick="openModal('Arena das Casas', 'https://v-rogana.github.io/competicao_casas_allos/'); return false;">Arena das Casas</a>
+            <a href="#" onclick="openModal('Calendário Allos', 'https://v-rogana.github.io/calendario-allos-escola/'); return false;">Calendário Escola</a>
+        </div>
+        <div class="footer-col">
+            <h4>Links</h4>
+            <a href="#pilares">Nossos Pilares</a>
+            <a href="#eventos">Eventos</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 Associação Allos. Transformando talentos em legado.</p>
+    </div>
+</footer>
+
+<!-- IFRAME MODAL -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <span class="modal-title" id="modalTitle">Plataforma</span>
+            <div class="modal-actions">
+                <a class="modal-btn" id="modalExternal" href="#" target="_blank" rel="noopener">Abrir em nova aba ↗</a>
+                <button class="modal-close" onclick="closeModal()" aria-label="Fechar">✕</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="modal-loader" id="modalLoader">
+                <div class="spinner"></div>
+            </div>
+            <iframe id="modalIframe" src="about:blank" title="Plataforma"></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    // === NAV SCROLL ===
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // === SCROLL REVEAL ===
+    const revealElements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    revealElements.forEach(el => observer.observe(el));
+
+    // === MODAL ===
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalIframe = document.getElementById('modalIframe');
+    const modalExternal = document.getElementById('modalExternal');
+    const modalLoader = document.getElementById('modalLoader');
+
+    function openModal(title, url) {
+        modalTitle.textContent = title;
+        modalExternal.href = url;
+        modalLoader.classList.remove('hidden');
+        modalIframe.src = url;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        modalIframe.onload = () => {
+            modalLoader.classList.add('hidden');
+        };
+    }
+
+    function closeModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            modalIframe.src = 'about:blank';
+        }, 400);
+    }
+
+    // Close on overlay click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+</script>
+
+</body>
+</html>
