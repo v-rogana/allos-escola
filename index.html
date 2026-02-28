@@ -884,23 +884,6 @@
         .reveal-delay-2 { transition-delay: 0.2s; }
         .reveal-delay-3 { transition-delay: 0.3s; }
         .reveal-delay-4 { transition-delay: 0.4s; }
-
-        /* === COMING SOON PLACEHOLDER === */
-        .coming-soon {
-            height: 220px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            color: var(--color-text-soft);
-            font-size: 0.9rem;
-        }
-
-        .coming-soon .icon {
-            font-size: 2rem;
-            opacity: 0.4;
-        }
     </style>
 </head>
 <body>
@@ -993,19 +976,19 @@
                 </div>
             </div>
 
-            <!-- Placeholder: Em breve -->
-            <div class="platform-card reveal reveal-delay-3" style="cursor: default;">
+            <!-- AvaliAllos -->
+            <div class="platform-card reveal reveal-delay-3" onclick="openModal('AvaliAllos', 'https://avaliallos-horarios.vercel.app/')">
                 <div class="card-preview">
-                    <div class="coming-soon">
-                        <span class="icon">🧪</span>
-                        Em breve
+                    <iframe src="https://avaliallos-horarios.vercel.app/" loading="lazy" sandbox="allow-scripts allow-same-origin" title="AvaliAllos preview"></iframe>
+                    <div class="card-preview-overlay">
+                        <button class="preview-btn">Abrir Plataforma</button>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="card-icon blue">🧠</div>
-                    <h3>Próxima Ferramenta</h3>
-                    <p>Novas plataformas e ferramentas interativas estão sendo desenvolvidas para enriquecer a experiência de aprendizado.</p>
-                    <span class="card-tag">🔜 Em desenvolvimento</span>
+                    <div class="card-icon rose">🩺</div>
+                    <h3>AvaliAllos</h3>
+                    <p>Sistema de agendamento para avaliação de competência clínica por roleplay. Agende sua sessão de forma rápida e simples.</p>
+                    <span class="card-tag">📋 Agendamento</span>
                 </div>
             </div>
 
@@ -1124,6 +1107,7 @@
             <h4>Plataformas</h4>
             <a href="#" onclick="openModal('Arena das Casas', 'https://v-rogana.github.io/competicao_casas_allos/'); return false;">Arena das Casas</a>
             <a href="#" onclick="openModal('Calendário Allos', 'https://v-rogana.github.io/calendario-allos-escola/'); return false;">Calendário Formação</a>
+            <a href="#" onclick="openModal('AvaliAllos', 'https://avaliallos-horarios.vercel.app/'); return false;">AvaliAllos</a>
         </div>
         <div class="footer-col">
             <h4>Links</h4>
