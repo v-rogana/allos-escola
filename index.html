@@ -27,6 +27,17 @@
             --shadow-hover: 0 12px 40px rgba(44, 36, 22, 0.12);
             --font-display: 'Fraunces', Georgia, serif;
             --font-body: 'DM Sans', system-ui, sans-serif;
+
+            /* House colors */
+            --prisma: #2B7A9E;
+            --prisma-light: #3AAFCF;
+            --prisma-dark: #1A5276;
+            --macondo: #6C4F9E;
+            --macondo-light: #9B7FD0;
+            --macondo-dark: #4A3072;
+            --marmoris: #D4A574;
+            --marmoris-light: #E8CBA8;
+            --marmoris-dark: #C4956A;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -454,7 +465,7 @@
         .card-icon.green { background: var(--color-accent-glow); }
         .card-icon.amber { background: var(--color-amber-light); }
         .card-icon.rose { background: #FDE8EA; }
-        .card-icon.blue { background: #E8EFF8; }
+        .card-icon.purple { background: #F0E8F5; }
 
         .card-body h3 {
             font-family: var(--font-display);
@@ -479,6 +490,303 @@
             font-weight: 500;
             color: var(--color-text-soft);
             margin-top: 0.75rem;
+        }
+
+        /* === QUIZ CARD PREVIEW === */
+        .quiz-preview {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #1A5276, #4A3072, #C4956A);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .quiz-preview-emblem {
+            opacity: 0.7;
+            transition: opacity 0.4s, transform 0.4s;
+        }
+
+        .platform-card:hover .quiz-preview-emblem {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .quiz-preview-text {
+            position: absolute;
+            bottom: 1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.9);
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+        }
+
+        /* === QUIZ MODAL === */
+        .quiz-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(44, 36, 22, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .quiz-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 580px;
+            max-height: 90vh;
+            background: var(--color-card);
+            border-radius: var(--radius);
+            overflow-y: auto;
+            box-shadow: 0 40px 80px rgba(44, 36, 22, 0.3);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .quiz-overlay.active .quiz-container {
+            transform: scale(1) translateY(0);
+        }
+
+        .quiz-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            background: var(--color-bg);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .quiz-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .quiz-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-soft);
+            transition: all 0.2s;
+        }
+
+        .quiz-close:hover {
+            background: var(--color-bg-warm);
+            color: var(--color-text);
+        }
+
+        .quiz-body {
+            padding: 2.5rem 2rem;
+        }
+
+        /* Quiz: Start screen */
+        .quiz-start {
+            text-align: center;
+        }
+
+        .quiz-start-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-start h3 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-start h3 em {
+            font-style: italic;
+            color: var(--color-accent);
+        }
+
+        .quiz-start p {
+            color: var(--color-text-soft);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            max-width: 380px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Quiz: Progress */
+        .quiz-progress {
+            margin-bottom: 2rem;
+        }
+
+        .quiz-progress-label {
+            font-size: 0.75rem;
+            color: var(--color-text-soft);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-progress-bar {
+            height: 3px;
+            border-radius: 2px;
+            background: var(--color-border);
+            overflow: hidden;
+        }
+
+        .quiz-progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--prisma), var(--macondo), var(--marmoris));
+            transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* Quiz: Question */
+        .quiz-question {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 400;
+            line-height: 1.4;
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .quiz-option {
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--color-border);
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--color-accent);
+            background: var(--color-accent-glow);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--color-accent);
+            background: var(--color-accent-glow);
+            color: var(--color-accent);
+            font-weight: 500;
+        }
+
+        /* Quiz: Result */
+        .quiz-result {
+            text-align: center;
+        }
+
+        .quiz-result-emblem {
+            margin-bottom: 1rem;
+        }
+
+        .quiz-result-house {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            font-style: italic;
+            margin-bottom: 0.25rem;
+        }
+
+        .quiz-result-tagline {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--color-text-soft);
+            margin-bottom: 2rem;
+        }
+
+        .quiz-result-bars {
+            text-align: left;
+            max-width: 360px;
+            margin: 0 auto 2rem;
+        }
+
+        .quiz-bar-row {
+            margin-bottom: 1rem;
+        }
+
+        .quiz-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.35rem;
+        }
+
+        .quiz-bar-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .quiz-bar-name.winner {
+            font-weight: 600;
+        }
+
+        .quiz-bar-pct {
+            font-size: 0.85rem;
+            color: var(--color-text-soft);
+        }
+
+        .quiz-bar-track {
+            height: 8px;
+            border-radius: 4px;
+            background: var(--color-border);
+            overflow: hidden;
+        }
+
+        .quiz-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .quiz-bar-fill.winner {
+            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+        }
+
+        .quiz-result-manifesto {
+            font-size: 0.9rem;
+            color: var(--color-text-soft);
+            line-height: 1.7;
+            max-width: 420px;
+            margin: 0 auto 2rem;
+            font-style: italic;
         }
 
         /* === VALUES / PILLARS === */
@@ -860,12 +1168,15 @@
             .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
             .platform-grid { grid-template-columns: 1fr; }
             .modal-container { height: 90vh; border-radius: var(--radius-sm); }
+            .quiz-container { max-height: 95vh; border-radius: var(--radius-sm); }
             .event-item { flex-wrap: wrap; }
             .event-tag { margin-left: 0; margin-top: 0.5rem; }
 
             section { padding: 4rem 1.25rem; }
 
             .hero { padding: 7rem 1.25rem 4rem; }
+
+            .quiz-body { padding: 1.5rem; }
         }
 
         /* === SCROLL ANIMATIONS === */
@@ -960,8 +1271,56 @@
                 </div>
             </div>
 
+            <!-- Descubra sua Casa -->
+            <div class="platform-card reveal reveal-delay-2" onclick="openQuiz()">
+                <div class="quiz-preview">
+                    <!-- Prisma emblem -->
+                    <svg class="quiz-preview-emblem" width="48" height="48" viewBox="0 0 48 48">
+                        <defs>
+                            <radialGradient id="qg-prisma" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#3AAFCF" stop-opacity="0.6"/><stop offset="100%" stop-color="#1A5276" stop-opacity="0"/></radialGradient>
+                            <linearGradient id="qf-prisma" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3AAFCF"/><stop offset="100%" stop-color="#1A5276"/></linearGradient>
+                        </defs>
+                        <circle cx="24" cy="24" r="19" fill="url(#qg-prisma)"/>
+                        <polygon points="24,9.6 36,33.6 12,33.6" fill="none" stroke="#3AAFCF" stroke-width="1.5"/>
+                        <polygon points="24,13.4 32.6,30.7 15.4,30.7" fill="url(#qf-prisma)" opacity="0.7"/>
+                    </svg>
+                    <!-- Macondo emblem -->
+                    <svg class="quiz-preview-emblem" width="48" height="48" viewBox="0 0 48 48">
+                        <defs>
+                            <radialGradient id="qg-macondo" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#9B7FD0" stop-opacity="0.6"/><stop offset="100%" stop-color="#4A3072" stop-opacity="0"/></radialGradient>
+                            <linearGradient id="qf-macondo" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#9B7FD0"/><stop offset="100%" stop-color="#4A3072"/></linearGradient>
+                        </defs>
+                        <circle cx="24" cy="24" r="19" fill="url(#qg-macondo)"/>
+                        <rect x="12" y="12" width="24" height="24" rx="4" fill="url(#qf-macondo)" opacity="0.7"/>
+                        <line x1="24" y1="12" x2="24" y2="36" stroke="#4A3072" stroke-width="1.5"/>
+                        <line x1="12" y1="24" x2="36" y2="24" stroke="#4A3072" stroke-width="1.5"/>
+                    </svg>
+                    <!-- Marmoris emblem -->
+                    <svg class="quiz-preview-emblem" width="48" height="48" viewBox="0 0 48 48">
+                        <defs>
+                            <radialGradient id="qg-marmoris" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#E8CBA8" stop-opacity="0.6"/><stop offset="100%" stop-color="#C4956A" stop-opacity="0"/></radialGradient>
+                            <linearGradient id="qf-marmoris" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E8CBA8"/><stop offset="100%" stop-color="#C4956A"/></linearGradient>
+                        </defs>
+                        <circle cx="24" cy="24" r="19" fill="url(#qg-marmoris)"/>
+                        <circle cx="24" cy="16.8" r="8.6" fill="url(#qf-marmoris)" opacity="0.8"/>
+                        <path d="M 9.6 28.8 Q 16.8 25 24 28.8 Q 31.2 32.6 38.4 28.8" fill="none" stroke="#E8CBA8" stroke-width="1.5" opacity="0.6"/>
+                        <path d="M 7.2 32.6 Q 16.8 28.8 24 32.6 Q 31.2 36.5 40.8 32.6" fill="none" stroke="#E8CBA8" stroke-width="1" opacity="0.4"/>
+                    </svg>
+                    <div class="card-preview-overlay">
+                        <button class="preview-btn">Fazer o Quiz</button>
+                    </div>
+                    <span class="quiz-preview-text">🎩 Descubra sua Casa</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-icon purple">🎩</div>
+                    <h3>Descubra sua Casa</h3>
+                    <p>Responda 5 perguntas e descubra qual Casa da Allos ressoa mais com o seu jeito de ser terapeuta.</p>
+                    <span class="card-tag">✨ Interativo</span>
+                </div>
+            </div>
+
             <!-- Calendário -->
-            <div class="platform-card reveal reveal-delay-2" onclick="openModal('Calendário Allos', 'https://v-rogana.github.io/calendario-allos-escola/')">
+            <div class="platform-card reveal reveal-delay-3" onclick="openModal('Calendário Allos', 'https://v-rogana.github.io/calendario-allos-escola/')">
                 <div class="card-preview">
                     <iframe src="https://v-rogana.github.io/calendario-allos-escola/" loading="lazy" sandbox="allow-scripts allow-same-origin" title="Calendário preview"></iframe>
                     <div class="card-preview-overlay">
@@ -977,7 +1336,7 @@
             </div>
 
             <!-- AvaliAllos -->
-            <div class="platform-card reveal reveal-delay-3" onclick="openModal('AvaliAllos', 'https://avaliallos-horarios.vercel.app/')">
+            <div class="platform-card reveal reveal-delay-4" onclick="openModal('AvaliAllos', 'https://avaliallos-horarios.vercel.app/')">
                 <div class="card-preview">
                     <iframe src="https://avaliallos-horarios.vercel.app/" loading="lazy" sandbox="allow-scripts allow-same-origin" title="AvaliAllos preview"></iframe>
                     <div class="card-preview-overlay">
@@ -1106,6 +1465,7 @@
         <div class="footer-col">
             <h4>Plataformas</h4>
             <a href="#" onclick="openModal('Arena das Casas', 'https://v-rogana.github.io/competicao_casas_allos/'); return false;">Arena das Casas</a>
+            <a href="#" onclick="openQuiz(); return false;">Descubra sua Casa</a>
             <a href="#" onclick="openModal('Calendário Allos', 'https://v-rogana.github.io/calendario-allos-escola/'); return false;">Calendário Formação</a>
             <a href="#" onclick="openModal('AvaliAllos', 'https://avaliallos-horarios.vercel.app/'); return false;">AvaliAllos</a>
         </div>
@@ -1139,14 +1499,31 @@
     </div>
 </div>
 
+<!-- QUIZ MODAL -->
+<div class="quiz-overlay" id="quizOverlay">
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <span class="quiz-title">Descubra sua Casa</span>
+            <button class="quiz-close" onclick="closeQuiz()" aria-label="Fechar">✕</button>
+        </div>
+        <div class="quiz-body" id="quizBody">
+            <!-- Rendered by JS -->
+        </div>
+    </div>
+</div>
+
 <script>
-    // === NAV SCROLL ===
+    // ═══════════════════════════════════════════════════════════════
+    // NAV SCROLL
+    // ═══════════════════════════════════════════════════════════════
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
         navbar.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // === SCROLL REVEAL ===
+    // ═══════════════════════════════════════════════════════════════
+    // SCROLL REVEAL
+    // ═══════════════════════════════════════════════════════════════
     const revealElements = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1158,7 +1535,9 @@
 
     revealElements.forEach(el => observer.observe(el));
 
-    // === MODAL ===
+    // ═══════════════════════════════════════════════════════════════
+    // IFRAME MODAL
+    // ═══════════════════════════════════════════════════════════════
     const modal = document.getElementById('modal');
     const modalTitle = document.getElementById('modalTitle');
     const modalIframe = document.getElementById('modalIframe');
@@ -1172,28 +1551,232 @@
         modalIframe.src = url;
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
-
-        modalIframe.onload = () => {
-            modalLoader.classList.add('hidden');
-        };
+        modalIframe.onload = () => { modalLoader.classList.add('hidden'); };
     }
 
     function closeModal() {
         modal.classList.remove('active');
         document.body.style.overflow = '';
-        setTimeout(() => {
-            modalIframe.src = 'about:blank';
-        }, 400);
+        setTimeout(() => { modalIframe.src = 'about:blank'; }, 400);
     }
 
-    // Close on overlay click
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    // ═══════════════════════════════════════════════════════════════
+    // QUIZ — DATA
+    // ═══════════════════════════════════════════════════════════════
+    const HOUSES = {
+        prisma: {
+            name: 'Prisma', color: '#2B7A9E', colorLight: '#3AAFCF', colorDark: '#1A5276',
+            gradient: 'linear-gradient(135deg, #1A5276, #2B7A9E, #3AAFCF)',
+            tagline: 'Pensamento e comportamento são inseparáveis',
+            manifesto: 'Um raio de luz bruto e indistinto atravessa o prisma e revela as cores que sempre estiveram ali. Não nos contentamos com explicações reducionistas — buscamos os pontos cegos da análise para reformulá-la com a complexidade que o caso exige.',
+        },
+        macondo: {
+            name: 'Macondo', color: '#6C4F9E', colorLight: '#9B7FD0', colorDark: '#4A3072',
+            gradient: 'linear-gradient(135deg, #4A3072, #6C4F9E, #9B7FD0)',
+            tagline: 'A magia que habita o real',
+            manifesto: 'A magia está ali porque sempre esteve. É no desencadear dos acontecimentos, na passagem do tempo, que a imagem toma forma e revela algo de transformador — partes que sempre existiram, dispersas, ganham contorno quando finalmente se encontram.',
+        },
+        marmoris: {
+            name: 'Marmoris', color: '#D4A574', colorLight: '#E8CBA8', colorDark: '#C4956A',
+            gradient: 'linear-gradient(135deg, #C4956A, #D4A574, #E8CBA8)',
+            tagline: 'A poesia que habita o simples',
+            manifesto: 'Marmoris é o brilho do sol refletido na água do mar. Algo tão simples, mas que, com os olhos certos, pode ser absurdamente bonito. Queremos construir uma comunidade tão atenta e viva que alguém sempre vai nos cutucar e lembrar: "ou, é mais do que água e sol".',
+        },
+    };
+
+    const HOUSE_ORDER = ['prisma', 'macondo', 'marmoris'];
+
+    const QUIZ_QUESTIONS = [
+        {
+            question: 'O que mais te atrai na psicologia clínica?',
+            options: [
+                { text: 'A possibilidade de compreender o comportamento humano com rigor e profundidade', scores: { prisma: 3, macondo: 0, marmoris: 1 } },
+                { text: 'O encantamento com a complexidade das narrativas de cada pessoa', scores: { prisma: 0, macondo: 3, marmoris: 1 } },
+                { text: 'A beleza dos pequenos momentos de conexão e transformação', scores: { prisma: 0, macondo: 1, marmoris: 3 } },
+            ],
+        },
+        {
+            question: 'Diante de um caso complexo, sua primeira reação é:',
+            options: [
+                { text: 'Mapear sistematicamente todas as variáveis e suas interações', scores: { prisma: 3, macondo: 1, marmoris: 0 } },
+                { text: 'Buscar as múltiplas perspectivas e sentidos ainda não desvelados', scores: { prisma: 0, macondo: 3, marmoris: 1 } },
+                { text: 'Estar presente e atento ao que emerge na relação terapêutica', scores: { prisma: 1, macondo: 0, marmoris: 3 } },
+            ],
+        },
+        {
+            question: 'Que frase te toca mais profundamente?',
+            options: [
+                { text: '"Sem clareza, tateamos apenas parcialmente o fenômeno"', scores: { prisma: 3, macondo: 0, marmoris: 1 } },
+                { text: '"É o próprio passo que inaugura o caminho"', scores: { prisma: 0, macondo: 3, marmoris: 1 } },
+                { text: '"De vez em quando, Deus me tira a poesia. Olho pedra, vejo pedra mesmo"', scores: { prisma: 0, macondo: 1, marmoris: 3 } },
+            ],
+        },
+        {
+            question: 'No trabalho em equipe, você valoriza mais:',
+            options: [
+                { text: 'A troca analítica que revela pontos cegos na formulação de caso', scores: { prisma: 3, macondo: 1, marmoris: 0 } },
+                { text: 'A construção coletiva de sentido a partir de olhares diferentes', scores: { prisma: 1, macondo: 3, marmoris: 1 } },
+                { text: 'O cuidado mútuo e a presença genuína entre colegas', scores: { prisma: 0, macondo: 1, marmoris: 3 } },
+            ],
+        },
+        {
+            question: 'O que te faz sentir que está evoluindo como terapeuta?',
+            options: [
+                { text: 'Quando minha formulação de caso se torna mais precisa e integrada', scores: { prisma: 3, macondo: 0, marmoris: 1 } },
+                { text: 'Quando consigo habitar a narrativa do paciente e ver o novo emergir', scores: { prisma: 0, macondo: 3, marmoris: 1 } },
+                { text: 'Quando percebo a beleza num silêncio ou numa mudança sutil de tom', scores: { prisma: 1, macondo: 1, marmoris: 3 } },
+            ],
+        },
+    ];
+
+    // ═══════════════════════════════════════════════════════════════
+    // QUIZ — ENGINE
+    // ═══════════════════════════════════════════════════════════════
+    let quizState = { currentQ: 0, scores: { prisma: 0, macondo: 0, marmoris: 0 }, started: false, result: null };
+
+    function openQuiz() {
+        quizState = { currentQ: 0, scores: { prisma: 0, macondo: 0, marmoris: 0 }, started: false, result: null };
+        renderQuiz();
+        document.getElementById('quizOverlay').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeQuiz() {
+        document.getElementById('quizOverlay').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('quizOverlay').addEventListener('click', (e) => {
+        if (e.target.id === 'quizOverlay') closeQuiz();
     });
 
-    // Close on Escape
+    function renderQuiz() {
+        const body = document.getElementById('quizBody');
+
+        // Start screen
+        if (!quizState.started) {
+            body.innerHTML = `
+                <div class="quiz-start">
+                    <div class="quiz-start-icon">🎩</div>
+                    <h3>Descubra sua <em>Casa</em></h3>
+                    <p>Responda 5 perguntas e descubra qual Casa da Allos ressoa mais com o seu jeito de ser terapeuta.</p>
+                    <button class="btn btn-primary" onclick="startQuiz()">Começar</button>
+                </div>
+            `;
+            return;
+        }
+
+        // Result screen
+        if (quizState.result) {
+            const h = HOUSES[quizState.result];
+            const total = quizState.scores.prisma + quizState.scores.macondo + quizState.scores.marmoris;
+            const bars = HOUSE_ORDER.map(key => {
+                const house = HOUSES[key];
+                const pct = total > 0 ? Math.round((quizState.scores[key] / total) * 100) : 0;
+                const isWinner = key === quizState.result;
+                return `
+                    <div class="quiz-bar-row">
+                        <div class="quiz-bar-header">
+                            <span class="quiz-bar-name ${isWinner ? 'winner' : ''}" style="color:${isWinner ? house.color : ''}">${house.name}</span>
+                            <span class="quiz-bar-pct">${pct}%</span>
+                        </div>
+                        <div class="quiz-bar-track">
+                            <div class="quiz-bar-fill ${isWinner ? 'winner' : ''}" id="bar-${key}" style="background:${house.gradient};width:0%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            body.innerHTML = `
+                <div class="quiz-result">
+                    <div class="quiz-result-emblem" style="font-size:3rem;">
+                        ${quizState.result === 'prisma' ? '△' : quizState.result === 'macondo' ? '▣' : '◉'}
+                    </div>
+                    <div class="quiz-result-house" style="color:${h.color}">${h.name}</div>
+                    <div class="quiz-result-tagline">"${h.tagline}"</div>
+                    <div class="quiz-result-bars">${bars}</div>
+                    <p class="quiz-result-manifesto">${h.manifesto}</p>
+                    <button class="btn btn-outline" onclick="openQuiz()" style="margin-right:0.5rem;">Refazer quiz</button>
+                </div>
+            `;
+
+            // Animate bars after render
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    HOUSE_ORDER.forEach(key => {
+                        const pct = total > 0 ? Math.round((quizState.scores[key] / total) * 100) : 0;
+                        const bar = document.getElementById('bar-' + key);
+                        if (bar) bar.style.width = pct + '%';
+                    });
+                });
+            });
+            return;
+        }
+
+        // Question screen
+        const q = QUIZ_QUESTIONS[quizState.currentQ];
+        const progress = ((quizState.currentQ + 1) / QUIZ_QUESTIONS.length) * 100;
+
+        const optionsHTML = q.options.map((opt, i) => `
+            <button class="quiz-option" onclick="answerQuiz(${i})">${opt.text}</button>
+        `).join('');
+
+        body.innerHTML = `
+            <div class="quiz-progress">
+                <div class="quiz-progress-label">Pergunta ${quizState.currentQ + 1} de ${QUIZ_QUESTIONS.length}</div>
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-fill" style="width:${progress}%"></div>
+                </div>
+            </div>
+            <div class="quiz-question">${q.question}</div>
+            <div class="quiz-options">${optionsHTML}</div>
+        `;
+    }
+
+    function startQuiz() {
+        quizState.started = true;
+        renderQuiz();
+    }
+
+    function answerQuiz(optIndex) {
+        const q = QUIZ_QUESTIONS[quizState.currentQ];
+        const opt = q.options[optIndex];
+
+        // Highlight selected
+        const buttons = document.querySelectorAll('.quiz-option');
+        buttons.forEach((btn, i) => {
+            btn.classList.toggle('selected', i === optIndex);
+            btn.style.pointerEvents = 'none';
+        });
+
+        // Update scores
+        Object.entries(opt.scores).forEach(([house, score]) => {
+            quizState.scores[house] += score;
+        });
+
+        setTimeout(() => {
+            if (quizState.currentQ < QUIZ_QUESTIONS.length - 1) {
+                quizState.currentQ++;
+                renderQuiz();
+            } else {
+                // Determine winner
+                const winner = Object.entries(quizState.scores).sort((a, b) => b[1] - a[1])[0][0];
+                quizState.result = winner;
+                renderQuiz();
+            }
+        }, 500);
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // KEYBOARD
+    // ═══════════════════════════════════════════════════════════════
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
+        if (e.key === 'Escape') {
+            closeModal();
+            closeQuiz();
+        }
     });
 </script>
 
